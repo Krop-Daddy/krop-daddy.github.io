@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Krop Daddy – Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand-navy:#0a2940;
+      --brand-accent:#ff6233;
+      --bg:#f4e8d8;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      display:flex;align-items:center;justify-content:center;
+      min-height:100vh;background:var(--bg);font-family:'Poppins',sans-serif;color:var(--brand-navy);
+      text-align:center;padding:1.5rem;
+    }
+    .card{max-width:480px;width:100%}
+    .logo{width:200px;margin:0 auto 1.75rem}
+    h1{font-size:clamp(2rem,5vw,3rem);font-weight:600;margin-bottom:.75rem}
+    p{font-size:1rem;margin-bottom:1.75rem;line-height:1.5}
+
+    /* email signup */
+    .signup{display:flex;gap:.5rem;justify-content:center;margin-bottom:1.5rem;flex-wrap:wrap}
+    .signup input{padding:.65rem 1rem;border:2px solid var(--brand-navy);border-radius:6px;font-size:1rem;flex:1 1 200px;min-width:0}
+    .signup button{padding:.65rem 1.2rem;border:none;border-radius:6px;background:var(--brand-navy);color:#fff;font-weight:600;font-size:1rem;cursor:pointer;transition:background .2s ease}
+    .signup button:hover{background:#061724}
+
+    /* socials */
+    .socials{display:flex;justify-content:center;gap:1.25rem;margin-top:1rem}
+    .socials a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:var(--brand-navy);transition:transform .2s ease}
+    .socials a img,.socials a svg{width:22px;height:22px}
+    .socials a svg{fill:#fff}
+    .socials a:hover{transform:scale(1.1)}
+
+    footer{margin-top:2rem;font-size:.75rem;color:var(--brand-navy)}
+  </style>
+
+</head>
+<body>
+  <main class="card">
+    <img class="logo" src="logo.png" alt="Krop Daddy logo" />
+    <h1>Crop it like it’s hot</h1>
+    <p>We’re gearing up to launch custom‑cropped tees & matching pet kerchiefs for the Front Range. Join the list and be first to know when we drop!</p>
+
+    <!-- Email signup form -->
+    <form
+      id="krop-form"
+      class="signup"
+      action="https://formspree.io/f/mrbkqnoe"
+      method="POST"
+    >
+      <input type="email" name="email" placeholder="Enter your email" required>
+      <button type="submit">Norify Me</button>
+      <p id="my-form-status"></p>
+    </form>
+
+    <!-- Social links -->
+    <div class="socials">
+      <!-- Instagram (PNG icon) -->
+      <a href="https://instagram.com/krop.daddy" aria-label="Krop Daddy on Instagram" target="_blank" rel="noopener">
+        <img src="instagram.png" alt="Instagram" />
+      </a>
+      <!-- TikTok (inline SVG) -->
+      <a href="https://www.tiktok.com/@kropdaddy" aria-label="Krop Daddy on TikTok" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12.75 0h4.685a6.565 6.565 0 0 0 1.93 4.642 6.73 6.73 0 0 0 4.635 1.934v4.71a11.397 11.397 0 0 1-6.098-1.783v7.79A9.708 9.708 0 0 1 8.112 24C3.67 24 0 20.33 0 15.888S3.67 7.775 8.112 7.775c.216 0 .43.01.642.027v4.714a5.116 5.116 0 0 0-.642-.04 3.368 3.368 0 1 0 3.368 3.367V0z"/>
+        </svg>
+      </a>
+    </div>
+    <footer>© <span id="year"></span> Krop Daddy. All rights reserved.</footer>
+  </main>
+  <script>
+    document.getElementById('year').textContent=new Date().getFullYear();
+  </script>
+
+  <script>
+    var form = document.getElementById("krop-form");
+    
+    async function handleSubmit(event) {
+      event.preventDefault();
+      var status = document.getElementById("my-form-status");
+      var data = new FormData(event.target);
+      fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          status.innerHTML = "Thanks for your submission!";
+          form.reset()
+        } else {
+          response.json().then(data => {
+            if (Object.hasOwn(data, 'errors')) {
+              status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+            } else {
+              status.innerHTML = "Oops! There was a problem submitting your form"
+            }
+          })
+        }
+      }).catch(error => {
+        status.innerHTML = "Oops! There was a problem submitting your form"
+      });
+    }
+    form.addEventListener("submit", handleSubmit)
+  </script>
+</body>
+</html>
